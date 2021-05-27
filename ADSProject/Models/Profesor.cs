@@ -26,5 +26,9 @@ namespace ADSProject.Models
         [MaxLength(length: 254, ErrorMessage = "La longitud del campo no puede ser mayor a 254 caracteres.")]
         [Required(ErrorMessage = "Este campo no puede quedar vacio")]
         public String Email { get; set; }
+
+        //Indica que no sera mapeado por el entityframework
+        [NotMapped]
+        public String NombreCompleto { get { return this.Nombres +" " + this.Apellidos; } }
     }
 }

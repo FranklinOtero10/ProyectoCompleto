@@ -196,6 +196,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AsignacionGrupoController.cs" />
     <Compile Include="Controllers\CarrerasController.cs" />
     <Compile Include="Controllers\EstudiantesController.cs" />
     <Compile Include="Controllers\GruposController.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MateriasController.cs" />
     <Compile Include="Controllers\ProfesoresController.cs" />
+    <Compile Include="DAL\AsignacionGrupoDAL.cs" />
     <Compile Include="DAL\CarreraDAL.cs" />
     <Compile Include="DAL\EstudianteDAL.cs" />
     <Compile Include="DAL\GrupoDAL.cs" />
@@ -219,8 +221,13 @@
     <Compile Include="Migrations\202105241734262_Relaciones.Designer.cs">
       <DependentUpon>202105241734262_Relaciones.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105251742295_AsignacionGrupo.cs" />
+    <Compile Include="Migrations\202105251742295_AsignacionGrupo.Designer.cs">
+      <DependentUpon>202105251742295_AsignacionGrupo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AsignacionGrupo.cs" />
     <Compile Include="Models\Carrera.cs" />
     <Compile Include="Models\Context\MyDbContext.cs" />
     <Compile Include="Models\Estudiante.cs" />
@@ -230,6 +237,7 @@
     <Compile Include="Models\Materia.cs" />
     <Compile Include="Models\Profesor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ServiceAsignacionGrupo.cs" />
     <Compile Include="Services\ServiceCarrera.cs" />
     <Compile Include="Services\ServiceEstudiantes.cs" />
     <Compile Include="Services\ServiceGrupo.cs" />
@@ -315,6 +323,7 @@
     <Content Include="Views\Profesores\Form.cshtml" />
     <Content Include="Views\Grupos\Index.cshtml" />
     <Content Include="Views\Grupos\Form.cshtml" />
+    <Content Include="Views\AsignacionGrupo\Form.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -333,6 +342,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105241734262_Relaciones.resx">
       <DependentUpon>202105241734262_Relaciones.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105251742295_AsignacionGrupo.resx">
+      <DependentUpon>202105251742295_AsignacionGrupo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

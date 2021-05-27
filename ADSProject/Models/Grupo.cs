@@ -41,5 +41,7 @@ namespace ADSProject.Models
         [Display(Name = "Año")]
         [Required(ErrorMessage = "Este campo no puede quedar vacio")]
         public int Anio { get; set; }
+
+        public ICollection<AsignacionGrupo> AsignacionGrupos { get; set; }
     }
 }

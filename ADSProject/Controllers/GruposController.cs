@@ -23,7 +23,7 @@ namespace ADSProject.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var grupo = servicio.obtenerTodos(new string[] { "Carrera", "Materia", "Profesor" });
+            var grupo = servicio.ObtenerTodos(new string[] { "Carrera", "Materia", "Profesor" });
             return View(grupo);
         }
 
@@ -31,10 +31,11 @@ namespace ADSProject.Controllers
         public ActionResult Form(int? id, Operacion operacion)
         {
             var grupo = new Grupo();
+            string[] includes = null;
             // Si el id tiene un valor; entonces se procede  a buscar un estudiante
             if (id.HasValue)
             {
-                grupo = servicio.obtenerPorID(id.Value);
+                grupo = servicio.ObtenerById(id.Value, includes);
             }
             // Indica la operacion que estamos realizando en el formulario
 
@@ -64,12 +65,12 @@ namespace ADSProject.Controllers
                     // Si el ID es 0; entonces se esta insertando
                     if (grupo.id == 0)
                     {
-                        id = servicio.insertar(grupo);
+                        id = servicio.Insertar(grupo);
                     }
                     else
                     {
                         // Si el ID es distinto de cero entonces estamos modificando
-                        id = servicio.modificar(grupo.id, grupo);
+                        id = servicio.Modificar(grupo.id, grupo);
                     }
 
                     //Si el id es mayor que 0 la operación es correcta
@@ -108,7 +109,7 @@ namespace ADSProject.Controllers
                 //variable que permite controlar si fue eliminado correctamente
                 bool correcto = false;
                 // Eliminar un grupo
-                correcto = servicio.eliminar(id);
+                correcto = servicio.Eliminar(id);
 
                 if (correcto)
                 {

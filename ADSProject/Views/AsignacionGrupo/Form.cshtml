@@ -1,0 +1,136 @@
+﻿@model ADSProject.Models.Grupo
+@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Asignación de grupo</h2>
+<hr />
+
+@using (Html.BeginForm("Form", "AsignacionGrupo", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="IdGrupo" value="@Model.id" name="Id" />
+    <input type="hidden" id="_redirectURL" value='@Url.Action("Index", "Grupos")' />
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-2">
+                <label>Año:</label>
+                @Html.DisplayFor(m => m.Anio)
+            </div>
+            <div class="col-md-2">
+                <label>Ciclo:</label>
+                @Html.DisplayFor(m => m.Ciclo)
+            </div>
+            <div class="col-md-4">
+                <label>Profesor:</label>
+                <span>@(Model.Profesor.Nombres + " " + Model.Profesor.Apellidos)</span>
+            </div>
+            <div class="col-md-4">
+                <label>Materia:</label>
+                @Html.DisplayFor(m => m.Materia.Nombre)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-4">
+                <label>Carrera:</label>
+                @Html.DisplayFor(m => m.Carrera.nombre)
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-md-1">
+                <label for="IdEstudiante" class="control-label">Estudiante:</label>
+            </div>
+            <div class="col-md-3">
+                @Html.DropDownList("IdEstudiante", new SelectList(ViewBag.Estudiantes, "Id", "Nombres"), "[Seleccione una opción]", htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="col-md-2">
+                <button type="button" value="Agregar" class="btn btn-default" onclick="agregarFila()">Agregar</button>
+            </div>
+        </div>
+        <hr />
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        Nombre completo del Estudiante
+                    </th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int i = 0;
+                }
+                @foreach (var item in Model.AsignacionGrupos)
+                {
+                    <tr>
+                        <td>
+                            <span>@(item.Estudiante.nombres + " " + item.Estudiante.apellidos)</span>
+                            <input type="hidden" name="AsignacionGrupos[@i].IdEstudiante" value="@item.Estudiante.id" class="IdEstudiante" />
+                            <input type="hidden" name="AsignacionGrupos[@i].IdGrupo" value="@Model.id" class="IdGrupo" />
+                        </td>
+                        <td>
+                            <button class="btn btn-xs btn-danger" onclick="quitarFila(this)">Eliminar</button>
+                        </td>
+                    </tr>
+                    {
+                        i++;
+                    }
+                }
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-2">
+                <input type="submit" value="Guardar" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+                    }
+<br />
+<br />
+<div>
+    @Html.ActionLink("Regresar", "Index", "Grupos", new { }, new { @class = "btn btn-default btn-sm" })
+</div>
+
+<style>
+    .table td:last-child, th:last-child {
+        text-align: center;
+    }
+</style>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function quitarFila(elemento) {
+            $(elemento).parent().closest("tr").remove();
+            recalcularIndices();
+        }
+        function agregarFila() {
+            var fila = $("<tr><td><span>" + $("#IdEstudiante option:selected").text() + "</span><input type='hidden' value='" + $("#IdEstudiante").val() + "' class='IdEstudiante' /><input type='hidden' value='" + $("#IdGrupo").val() + "' class='IdGrupo' /></td><td><button class='btn btn-xs btn-danger' onclick='quitarFila(this)'>Eliminar</button></td></tr>");
+            $("tbody").append(fila);
+            recalcularIndices();
+        }
+        function recalcularIndices() {
+            var i = 0;
+            $(".IdEstudiante").each(function () {
+                $(this).attr("name", "AsignacionGrupos[" + i + "].IdEstudiante");
+                i++;
+            });
+            i = 0;
+            $(".IdGrupo").each(function () {
+                $(this).attr("name", "AsignacionGrupos[" + i + "].IdGrupo");
+                i++;
+            });
+        }
+        $(document).ready(function () {
+            //Agregamos a los formularios la clase form-ajax
+            //La cual activa el formulario para trabajar con Ajax
+            $("form").addClass("form-ajax");
+            //Activamos Ajax
+            initAjaxForm();
+        });
+    </script>
+}

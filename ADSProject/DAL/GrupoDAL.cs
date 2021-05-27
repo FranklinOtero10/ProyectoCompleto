@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 using ADSProject.Models.Context;
 using System.Data.Entity;
@@ -10,83 +11,41 @@ namespace ADSProject.DAL
 {
     public class GrupoDAL
     {
-        //public static List<Grupo> lstGrupos = new List<Grupo>();
-        //Instancia del contexto que nos permite conectarnos a la BD
         private MyDbContext _context;
 
-        public GrupoDAL(MyDbContext context) { _context = context; }
+        public GrupoDAL(MyDbContext context)
+        {
+            _context = context;
+        }
 
-        public int insertarGrupo(Grupo grupo)
+        // Se listan todos los Profesores
+        public List<Grupo> ObtenerTodos()
         {
             try
             {
-                //Se agregega el grupo que se insertar
-                _context.Grupo.Add(grupo);
-                //Se guardan los cambios en la bd
-                _context.SaveChanges();
-                //se retorno el id del grupo insertada
-                return grupo.id;
+                var listado = _context.Grupo.Include("Carrera").Include("Materia").Include("Profesor").ToList();
+                return listado;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
         }
 
-        public int modificarGrupo(int id, Grupo grupo)
-        {
-            try
-            {
-                // Se consulta el grupo
-                var currentItem = _context.Grupo.SingleOrDefault(temp => temp.id == id);
-                //trasladar los valores del grupo que queremos modificar al registro que acabamos de consultar
-                _context.Entry(currentItem).CurrentValues.SetValues(grupo);
-                //guardamos los cambios
-                _context.SaveChanges();
-                //retornamos el id de la carrera recien modificada
-                return grupo.id;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        public bool eliminarGrupo(int id)
-        {
-            try
-            {
-                //se consulta el grupo que se quiere eliminar por el id
-                var item = _context.Grupo.SingleOrDefault(x => x.id == id);
-                //remover el grupo recien consultada
-                _context.Grupo.Remove(item);
-                //se guardan los cambios 
-                _context.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                throw;
-            }
-        }
-
-        // Para listar todos los grupos
-        public List<Grupo> obtenerTodos()
-        {
-            //Se consultan todos los registros de grupo
-            var listado = _context.Grupo.ToList();
-            //retorno el listado de registros
-            return listado;
-        }
-
-        public List<Grupo> obtenerTodos(string[] includes)
+        // Se listan todos los Grupos
+        public List<Grupo> ObtenerTodos(
+            string[] includes
+            )
         {
             try
             {
                 var listado = _context.Grupo.AsQueryable();
-                foreach (var include in includes)
+                if (includes != null && includes.Count() > 0)
                 {
-                    listado = listado.Include(include);
+                    foreach (var include in includes)
+                    {
+                        listado = listado.Include(include);
+                    }
                 }
                 return listado.ToList();
             }
@@ -96,13 +55,81 @@ namespace ADSProject.DAL
             }
         }
 
-        public Grupo obtenerPorID(int id)
+        // Se busca el Grupo en el listado usando el Id
+        public Grupo ObtenerById(int Id)
         {
             try
             {
-                //Se obtiene el registro usando el id
-                var elementos = _context.Grupo.SingleOrDefault(temp => temp.id == id);
-                return elementos;
+                var item = _context.Grupo.SingleOrDefault(x => x.id == Id);
+                return item;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        // Se busca el Grupo en el listado usando el Id
+        public Grupo ObtenerById(int Id, string[] includes)
+        {
+            try
+            {
+                var item = _context.Grupo.AsQueryable();
+                if (includes != null && includes.Count() > 0)
+                {
+                    foreach (var include in includes)
+                    {
+                        item = item.Include(include);
+                    }
+                }
+                return item.SingleOrDefault(x => x.id == Id); ;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        // Se inserta el Grupo en el listado
+        public int Insertar(Grupo model)
+        {
+            try
+            {
+                _context.Grupo.Add(model);
+                _context.SaveChanges();
+                return model.id;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        // Se modifica el Grupo en el listado
+        public int Modificar(int Id, Grupo model)
+        {
+            try
+            {
+                var currentItem = _context.Grupo.SingleOrDefault(x => x.id == Id);
+                _context.Entry(currentItem).CurrentValues.SetValues(model);
+                _context.SaveChanges();
+                return model.id;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        // Se elimina el Grupo del listado
+        public bool Eliminar(int Id)
+        {
+            try
+            {
+                var item = _context.Grupo.SingleOrDefault(x => x.id == Id);
+                _context.Grupo.Remove(item);
+                _context.SaveChanges();
+                return true;
             }
             catch (Exception ex)
             {
@@ -110,4 +137,5 @@ namespace ADSProject.DAL
             }
         }
     }
+
 }

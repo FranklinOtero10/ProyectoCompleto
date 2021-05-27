@@ -10,20 +10,15 @@ namespace ADSProject.Services
 {
     public class ServiceGrupo
     {
-        //public GrupoDAL grupoDal = new GrupoDAL();
-
-        // Para insertar estudiante
-        public int insertar(Grupo grupo)
+        // Se obtienen todos los Grupos
+        public List<Grupo> ObtenerTodos()
         {
             try
             {
-                //Inicializar el proceso para conectarnos a la bd
                 using (MyDbContext context = new MyDbContext())
                 {
-                    //crear instancia de la DAL y le pasamos el context
                     GrupoDAL dal = new GrupoDAL(context);
-                    //Llamada para obtener el metodo de todos los registros
-                    return dal.insertarGrupo(grupo);
+                    return dal.ObtenerTodos();
                 }
             }
             catch (Exception ex)
@@ -32,17 +27,15 @@ namespace ADSProject.Services
             }
         }
 
-        public int modificar(int id, Grupo grupo)
+        // Se obtienen todos los Grupos
+        public List<Grupo> ObtenerTodos(string[] includes)
         {
             try
             {
-                //Inicializar el proceso para conectarnos a la bd
                 using (MyDbContext context = new MyDbContext())
                 {
-                    //crear instancia de la DAL y le pasamos el context
                     GrupoDAL dal = new GrupoDAL(context);
-                    //Llamada para obtener el metodo de todos los registros
-                    return dal.modificarGrupo(id,grupo);
+                    return dal.ObtenerTodos(includes);
                 }
             }
             catch (Exception ex)
@@ -51,19 +44,15 @@ namespace ADSProject.Services
             }
         }
 
-        // Para eliminar
-
-        public bool eliminar(int id)
+        // Se busca el Grupo por el Id
+        public Grupo ObtenerById(int Id, string[] includes)
         {
             try
             {
-                //Inicializar el proceso para conectarnos a la bd
                 using (MyDbContext context = new MyDbContext())
                 {
-                    //crear instancia de la DAL y le pasamos el context
                     GrupoDAL dal = new GrupoDAL(context);
-                    //Llamada para obtener el metodo de todos los registros
-                    return dal.eliminarGrupo(id);
+                    return dal.ObtenerById(Id, includes);
                 }
             }
             catch (Exception ex)
@@ -72,27 +61,15 @@ namespace ADSProject.Services
             }
         }
 
-        public List<Grupo> obtenerTodos()
-        {
-            //Inicializar el proceso para conectarnos a la bd
-            using (MyDbContext context = new MyDbContext())
-            {
-                //crear instancia de la DAL y le pasamos el context
-                GrupoDAL dal = new GrupoDAL(context);
-                //Llamada para obtener el metodo de todos los registros
-                return dal.obtenerTodos();
-            }
-        }
-
-        // Se obtienen todos los grupos con sus propiedades
-        public List<Grupo> obtenerTodos(string[] includes)
+        // Se inserta un Grupo
+        public int Insertar(Grupo model)
         {
             try
             {
                 using (MyDbContext context = new MyDbContext())
                 {
                     GrupoDAL dal = new GrupoDAL(context);
-                    return dal.obtenerTodos(includes);
+                    return dal.Insertar(model);
                 }
             }
             catch (Exception ex)
@@ -101,19 +78,34 @@ namespace ADSProject.Services
             }
         }
 
-        // Para obtener por ID.
-        public Grupo obtenerPorID(int id)
+        // Se modifica un Grupo
+        public int Modificar(int Id, Grupo model)
         {
             try
             {
-                //Inicializar el proceso para conectarnos a la bd
                 using (MyDbContext context = new MyDbContext())
                 {
-                    //crear instancia de la DAL y le pasamos el context
                     GrupoDAL dal = new GrupoDAL(context);
-                    //Llamada para obtener el metodo de todos los registros
-                    return dal.obtenerPorID(id);
+                    return dal.Modificar(Id, model);
                 }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        // Se elimina un Grupo
+        public bool Eliminar(int Id)
+        {
+            try
+            {
+                using (MyDbContext context = new MyDbContext())
+                {
+                    GrupoDAL dal = new GrupoDAL(context);
+                    return dal.Eliminar(Id);
+                }
+
             }
             catch (Exception ex)
             {
