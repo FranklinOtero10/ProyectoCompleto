@@ -45,9 +45,10 @@
             </div>
             <div class="col-md-3">
                 @Html.DropDownList("IdEstudiante", new SelectList(ViewBag.Estudiantes, "Id", "Nombres"), "[Seleccione una opción]", htmlAttributes: new { @class = "form-control" })
+                <p id="m" style="color: red;"></p> 
             </div>
             <div class="col-md-2">
-                <button type="button" value="Agregar" class="btn btn-default" onclick="agregarFila()">Agregar</button>
+                <button id="val" type="button" value="Agregar" class="btn btn-default">Agregar</button>
             </div>
         </div>
         <hr />
@@ -112,6 +113,7 @@
             var fila = $("<tr><td><span>" + $("#IdEstudiante option:selected").text() + "</span><input type='hidden' value='" + $("#IdEstudiante").val() + "' class='IdEstudiante' /><input type='hidden' value='" + $("#IdGrupo").val() + "' class='IdGrupo' /></td><td><button class='btn btn-xs btn-danger' onclick='quitarFila(this)'>Eliminar</button></td></tr>");
             $("tbody").append(fila);
             recalcularIndices();
+
         }
         function recalcularIndices() {
             var i = 0;
@@ -132,5 +134,22 @@
             //Activamos Ajax
             initAjaxForm();
         });
+
+        document.getElementById("val").addEventListener("click", function () {
+            validar();
+        });
+
+        function validar()
+        {
+            var estudiante = document.getElementById('IdEstudiante').value;
+            if (estudiante.length == 0) {
+                document.getElementById("m").innerHTML = "Campo requerido"
+                return;
+            } else {
+                document.getElementById("m").innerHTML = ""
+                agregarFila();
+            }
+        }
+
     </script>
 }

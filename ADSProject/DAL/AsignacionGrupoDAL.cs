@@ -79,7 +79,7 @@ namespace ADSProject.DAL
                 //Se guardan los cambios en la BD
                 _context.SaveChanges();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

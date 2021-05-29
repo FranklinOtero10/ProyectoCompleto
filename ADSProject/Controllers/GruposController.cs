@@ -51,6 +51,14 @@ namespace ADSProject.Controllers
             return View(grupo);
         }
 
+        [HttpGet]
+        public JsonResult CargarMaterias(int? IdCarrera)
+        {
+            var listadoCarreras = IdCarrera == null ? new List<Materia>() :
+            servicioMateria.obtenerTodos().Where(x => x.IdCarrera == IdCarrera);
+            return new JsonHttpStatusResult(listadoCarreras, HttpStatusCode.OK);
+        }
+
         [HttpPost]
         public ActionResult Form(Grupo grupo)
         {

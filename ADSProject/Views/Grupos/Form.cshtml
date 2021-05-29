@@ -15,9 +15,10 @@
     <input type="hidden" id="operacion" value="@ViewData["Operacion"]" />
     <input type="hidden" id="_redirectURL" value="@Url.Action("Index","Grupos")" />
     <div class="form-horizontal">
-        <h4>Grupo</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.id)
+
         <div class="form-group">
             @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -93,16 +94,60 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script>
-        $(document).ready(function () {
-            //Deshabilitar los controles del formulario, cuando la operacion es "ver"
-            if ($("#operacion").val() == "ver") {
-                $("form").find("input,select").attr("disabled", true);
-            }
 
-            //Agregando la clase form-ajax, la cual activa el formulario para trabajar con ajax
+        $(document).ready(function () {
+            // Cuando la operación es Ver, entonces se deben desabilitar los controles del formulario.
+            if ($("#_operacion").val() == "Ver") {
+                $("form").find("input, select").attr("disabled", true);
+            }
+            //Agregamos a los formularios la clase form-ajax
+            //La cual activa el formulario para trabajar con Ajax
             $("form").addClass("form-ajax");
-            //activar ajax
+            //Activamos Ajax
             initAjaxForm();
+
+            $("#IdCarrera").change(cargarMaterias);
+
+            $("#IdCarrera").trigger("change");
         });
+
+        function cargarMaterias() {
+            cargarDataCombobox('@Url.Action("CargarMaterias", "Grupos")?IdCarrera=' + $("#IdCarrera").val(), $("#IdMateria"));
+        }
+
+        function cargarDataCombobox(URL, cmb) {
+            $.ajax({
+                url: URL,
+                headers: {
+                    'Accept': "application/json; charset=utf-8"
+                },
+                beforeSend: function () {
+                    console.log("Iniciando petición...");
+                },
+                success: function (data) {
+                    var valorSeleccionado = $("#IdMateria").val();
+                    cmb.html("<option value=''>[Seleccione una opción]</option>");
+                    $.each(data, function (index, item) {
+                        if (valorSeleccionado == item.Id) {
+                            cmb.append(`<option selected value=${item.id}>${item.Nombre}</option>`);
+                        } else {
+                            cmb.append(`<option value=${item.id}>${item.Nombre}</option>`);
+                        }
+                    });
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log("Ocurrió un error en la petición.");
+                },
+                complete: function () {
+                    console.log("Petición completada.");
+                },
+                type: "GET",
+                contentType: false,
+                processData: false,
+                async: true,
+                cache: false
+            });
+        }
+
     </script>
 }

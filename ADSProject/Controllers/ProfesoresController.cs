@@ -112,7 +112,7 @@ namespace ADSProject.Controllers
                 }
                 //return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return new JsonHttpStatusResult(new { id }, HttpStatusCode.InternalServerError);
                 throw;
